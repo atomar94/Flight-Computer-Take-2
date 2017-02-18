@@ -12,11 +12,12 @@ using namespace std;
 class Valve_Parser
 {
     public:
+        Valve_Parser(string filename);
         void load_and_parse(string filename);
-        list<Valve> get_valves();       
+        list<Valve *> get_valves();       
 
     private:
-        list<Valve> valves;
+        list<Valve *> valves;
         bool debug = false;
 };
 

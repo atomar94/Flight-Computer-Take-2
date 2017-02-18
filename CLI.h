@@ -3,29 +3,28 @@
 #include "Network.h"
 #include "string"
 #include "list"
+#include "Valve.h"
 
+#ifndef CLI_H
+#define CLI_H
 using namespace std;
 
 class CLI
 {
     public:
     CLI();
-    string read_server();    
     void loop();
-    void init();
     
     list<string> parse(string input);
     void route(list<string> message);
 
-
-
     //built in commands
     string echo(list<string> message); 
-    string status(list<string> message);
+    void status(list<string> message);
 
     //valve.h wrappers
     void open_valve(list<string> message);
-    void close_valve();
+    void close_valve(list<string> message);
     void actuate();
     void deactaute();
     void is_actuated();
@@ -33,8 +32,9 @@ class CLI
 
     list<string> split(string str, char delim);
 
+    private:
+        list<Valve *> m_valves;
+
 };
 
-
-
-
+#endif

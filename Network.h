@@ -16,7 +16,7 @@ class Network
     public:
         Network();
         int nwrite(string message);
-        string nread()
+        string nread();
         void connect_ground_server();
 
     private:

@@ -7,13 +7,21 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <ctype.h>
 
 using namespace std;
+
+Valve_Parser::Valve_Parser(string filename)
+{
+    load_and_parse(filename);
+}
 
 void Valve_Parser::load_and_parse(string filename)
 {
     cout << "Starting Parser" << endl;
     ifstream ifs(filename.c_str());
+
+    bool debug = true;
 
     string line;
     string token;
@@ -21,13 +29,12 @@ void Valve_Parser::load_and_parse(string filename)
     bool valve_normal_open;
     int port_number;
 
+
+
     for(int line_number = 0; 
             getline(ifs, line);
             line_number++)
     {
-        if(debug)
-            cout << "on line " << line_number << endl;
-
         if(line.front() == '#')
             continue;
         if(line.size() == 0)
@@ -42,9 +49,7 @@ void Valve_Parser::load_and_parse(string filename)
                 getline(line_stream, token, ' ');
                 word_number++)
         {
-            if(debug)
-                cout << "\ton word " << word_number << endl;
-            if(token == "")
+           if(token == "")
             {
                 cout << "Hey there's some weird shit on line " << line_number << endl;
                 break;
@@ -52,9 +57,7 @@ void Valve_Parser::load_and_parse(string filename)
 
             if(word_number == 0)
             {
-                if(debug)
-                    cout << "\t\tgot valve name " << token << endl;
-                valve_name = token;
+               valve_name = token;
             }
 
             /*
@@ -62,10 +65,10 @@ void Valve_Parser::load_and_parse(string filename)
             */
             else if(word_number == 1)
             {
-               if(token.to_lower() == "open")
+               if(token == "open")
                    valve_normal_open = true;
 
-               else if(token.to_lower() == "closed")
+               else if(token == "closed")
                    valve_normal_open = false;
                //bad keywords
                else
@@ -95,20 +98,15 @@ void Valve_Parser::load_and_parse(string filename)
                    port_number = stoi(token);
                }
             }
-            else //word_number > 2
-            {
-                valves.push_back(Valve(valve_name, 
-                                       valve_normal_open, 
-                                       port_number)); 
-                break;
-            }
-       } //end for word...
+      } //end for word...
+      valves.push_back(new Valve(valve_name, 
+                       valve_normal_open, 
+                       port_number)); 
+ 
     } //end for line...
-
-
 }
 
-list<Valve> Valve_Parser::get_valves()
+list<Valve *> Valve_Parser::get_valves()
 {
     return valves;
 }
