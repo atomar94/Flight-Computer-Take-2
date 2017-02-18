@@ -14,7 +14,6 @@ list<string> CLI::parse(string input)
 void CLI::status(list<string> message)
 {
     return echo(message);
-
 }
 
 void CLI::echo(list<string> message)
