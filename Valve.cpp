@@ -1,10 +1,12 @@
-//valve.cpp
+//Valve.cpp
 
-#include "valve.h"
+#include "Valve.h"
 #include <string>
+#include "/home/pi/bcm2835-1.50/src/bcm2835.h"
 
+using namespace std;
 
-valve::valve(string name, 
+Valve::Valve(string name, 
 bool normal_open, int port_number)
 {
     if(!bcm2835_init())
@@ -28,41 +30,40 @@ bool normal_open, int port_number)
         case(7): bcm_pin_actuate = RPI_BPLUS_GPIO_J8_12;
         default: bcm_pin_actuate =  0;
     }
-    bcm_pin_receive = 0;
 }
 
 
-bool valve:actuate()
+bool Valve::actuate()
 {
-    bcm_gpio_write(bcm_pin_actuate, HIGH);
+    bcm2835_gpio_write(bcm_pin_actuate, HIGH);
     actuated = true;
     return actuated;
 }
 
 
-bool valve::deactuate() 
+bool Valve::deactuate() 
 {
-    bcm_gpio_write(bcm_pin_actuate, LOW);
+    bcm2835_gpio_write(bcm_pin_actuate, LOW);
     actuated = false;
     return actuated;
 }
 
 
-bool valve::open_valve() {
+bool Valve::open_valve() {
     if(is_normal_open)
         deactuate();
     else 
         actuate();
 }
 
-bool valve::close_valve() {
+bool Valve::close_valve() {
     if(is_normal_open)
         actuate();
     else
         deactuate();
 }
 
-bool valve::is_actuated()
+bool Valve::is_actuated()
 {
     return actuated;
 }

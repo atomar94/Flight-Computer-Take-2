@@ -1,22 +1,24 @@
 #include "CLI.h"
 #include "string"
 #include "iostream"
+#include <sstream>
 
 using namespace std;
 
 
 list<string> CLI::parse(string input)
 {
+    char delim = ' ';
     list<string> tokens = split(input, delim);
     return tokens;
 }
 
-void CLI::status(list<string> message)
+string CLI::status(list<string> message)
 {
-    return echo(message);
+    return "to be implemented. if you see this yell at Alex.\n";
 }
 
-void CLI::echo(list<string> message)
+string CLI::echo(list<string> message)
 {
     string retval = "";
     for(list<string>::iterator it = message.begin();
@@ -37,7 +39,7 @@ void CLI::route(list<string> message)
         status(message);
 }
 
-list<string> CLI::Testing_Producer::split(string str, char delim)
+list<string> CLI::split(string str, char delim)
 {
     stringstream ss;
     ss.str(str);

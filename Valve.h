@@ -1,19 +1,23 @@
 //valve.h
 #include <string>
 
+#ifndef VALVE_H
+#define VALVE_H
 
+using namespace std;
 
-class valve
+class Valve
 {
+    public:
     //when we don't care if it worked
-    valve(string name, //human readable
+    Valve(string name, //human readable
          bool normal_open, //valve type
          int port_number); // port on the box this valve is on 
 
     bool is_actuated();
     bool is_open();
     bool open_valve();
-    bool close_valve()
+    bool close_valve();
     bool actuate();
     bool deactuate();
 
@@ -22,31 +26,6 @@ class valve
         bool actuated;
         string name;
         int port_number;
-        uint32_t bcm_pin_actuate;
+        unsigned int bcm_pin_actuate;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif
