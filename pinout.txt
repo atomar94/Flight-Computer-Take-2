@@ -1,0 +1,17 @@
+Pinout for this rpi
+
+Rasp-Pi GPIO means the raspberry pi GPIO header number.
+
+these are the numbers that increment normally 
+(1,3,5,7...) on the left
+(2,4,6,8...) on the right
+
+Valve     Rasp-Pi GPIO Number
+valve 1     3
+valve 2     5
+valve 3     7
+valve 4     8
+valve 5     10
+valve 6     11
+valve 7     12
+
