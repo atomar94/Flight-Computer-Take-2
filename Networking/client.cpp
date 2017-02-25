@@ -23,6 +23,15 @@ void Client::get(string ip_addr, int port, string path)
     write_to(ip_addr, port, ss.str());
 }
 
+void Client::post(string ip_addr, int port, string data)
+{
+    stringstream ss;
+    ss << "POST " << "/ " << "HTTP/1.0\r\n";
+    ss << "From: vcb1\r\n"; //make this loaded from cfg file
+    ss << "Content-Type: text/json\r\n";
+    ss << "Content-Length: " << data.size() << "\r\n\r\n";
+    write_to(ip_addr, port, data);
+}
 
 void Client::write_to(string ip_addr, int portnum, string msg)
 {
