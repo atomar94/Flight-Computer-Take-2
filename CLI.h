@@ -1,6 +1,5 @@
 //CLI.h
 
-#include "Network.h"
 #include "string"
 #include "list"
 #include "Valve.h"
