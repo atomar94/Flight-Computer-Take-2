@@ -3,6 +3,7 @@
 #include "string"
 #include "list"
 #include "Valve.h"
+#include "Networking/client.h"
 
 #ifndef CLI_H
 #define CLI_H
@@ -33,7 +34,7 @@ class CLI
 
     private:
         list<Valve *> m_valves;
-
+        Client mclient;
 };
 
 #endif

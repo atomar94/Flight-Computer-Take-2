@@ -18,7 +18,7 @@ void Client::get(string ip_addr, int port, string path)
 {
     stringstream ss;
     ss << "GET " << path << " HTTP/1.1" << "\r\n";
-    ss << "Host: vcb1-server" << "\r\n\r\n"; 
+    ss << "Host: vcb1-client" << "\r\n\r\n"; 
     
     write_to(ip_addr, port, ss.str());
 }
@@ -27,10 +27,11 @@ void Client::post(string ip_addr, int port, string data)
 {
     stringstream ss;
     ss << "POST " << "/ " << "HTTP/1.0\r\n";
-    ss << "From: vcb1\r\n"; //make this loaded from cfg file
-    ss << "Content-Type: text/json\r\n";
+    ss << "From: vcb1-client\r\n"; //make this loaded from cfg file
+    ss << "Content-Type: application/json\r\n";
     ss << "Content-Length: " << data.size() << "\r\n\r\n";
-    write_to(ip_addr, port, data);
+    ss << data << "\r\n\r\n";
+    write_to(ip_addr, port, ss.str());
 }
 
 void Client::write_to(string ip_addr, int portnum, string msg)

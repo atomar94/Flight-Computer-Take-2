@@ -3,14 +3,20 @@
 #include "iostream"
 #include <sstream>
 #include "Valve_Parser.h"
+#include "Networking/client.h"
 
 using namespace std;
 
+//todo clean this up
+string server_ip = "10.10.10.1"; 
 
 CLI::CLI()
 {
     Valve_Parser parser("./valves.txt");
     m_valves = parser.get_valves();
+    
+    mclient.post(server_ip, 8000, "{\"identity\": \"vcb1\", \"server-port\": \"8000\"}");
+
 }
 
 list<string> CLI::parse(string input)
@@ -79,6 +85,11 @@ void CLI::open_valve(list<string> message)
         if( (*it)->get_name() == valve_name)
         {
             (*it)->open_valve();
+            stringstream ss;
+            ss << "{ \"identity\": \"vcb1\", ";
+            ss << "\"valve-name\": \"" << (*it)->get_name() << "\", ";
+            ss << "\"valve-status\": \"open\"}";
+            mclient.post(server_ip, 8000, ss.str()); 
             return;
         }
     }
@@ -101,7 +112,11 @@ void CLI::close_valve(list<string> message)
     {
         if( (*it)->get_name() == valve_name)
         {
-            (*it)->close_valve();
+            stringstream ss;
+            ss << "{ \"identity\": \"vcb1\", ";
+            ss << "\"valve-name\": \"" << (*it)->get_name() << "\", ";
+            ss << "\"valve-status\": \"closed\"}";
+            mclient.post(server_ip, 8000, ss.str()); 
             return;
         }
     }
