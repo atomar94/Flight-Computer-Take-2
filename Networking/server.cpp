@@ -96,10 +96,7 @@ pair<string, string> Server::read_request(int portnum)
         return pair<string, string>("","");
     }
     string stdstr = buffer;
-    cout << stdstr << endl;
-    cout << endl << "-----------------------------------------------------" << endl;
     HTTP_Req req(stdstr);
-    //cout << " >" << req.get_type() << " Request for " << req.get_path() << endl;
 
     send_response(""); //send an empty response.
     close(sockfd);

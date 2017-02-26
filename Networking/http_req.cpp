@@ -24,10 +24,14 @@ HTTP_Req::HTTP_Req(std::string req)
         parse_req_type(*it); 
         parse_content_length(*it);
     }
-    if(content_length != 0)
+    cout << "Content length = " << content_length << endl;
+    if(content_length)
     {
         if(!parse_payload(req))
-            cout << "Payload: " << payload << endl;
+        {
+            cout << "Payload: " << endl;
+            cout << payload << endl;
+        }
         else
             cout << "No payload found" << endl;
     }
@@ -96,18 +100,15 @@ int HTTP_Req::parse_content_length(string s)
 */
 int HTTP_Req::parse_payload(string s)
 {
-    cout << "Payload Parser" << endl;
     bool payload_flag = false;
     list<string> lines = split(s, '\n');
     stringstream ss;
     for( auto it = lines.begin(); it != lines.end(); it++)
     {
-        cout << *it << endl;
         //header is split by a single line of only \r\n
         if( (*it) == "\r\n" || (*it) == "\n" || (*it) == "\r")
         {
            payload_flag = true;
-           cout << "a whitespace" << endl;
         }
         if(payload_flag)
         {
