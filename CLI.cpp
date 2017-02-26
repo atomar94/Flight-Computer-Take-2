@@ -164,8 +164,8 @@ void CLI::loop()
 
     while(true)
     {
-        //cout << "> ";
-        //getline(cin, input);
+        cout << "waiting... ";
+        getline(cin, input);
         pair<string, string> retval = mserver.read_request(8000);
         if(retval.first == "")
           continue;

@@ -49,6 +49,11 @@ pair<string, string> Server::read_request(int portnum)
         close(sockfd);
         return pair<string, string>("", "");
     }
+    int optval = 1; //so we can set the value of SO_REUSEADDR to 1
+    //so after we close the socket it is released immediately
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+
     memset((char *) &serv_addr, 0, sizeof(serv_addr));	
     serv_addr.sin_family = AF_INET;
     //serv_addr.sin_addr.s_addr = INADDR_ANY;
@@ -92,7 +97,7 @@ pair<string, string> Server::read_request(int portnum)
     }
     string stdstr = buffer;
     cout << stdstr << endl;
-    cout << endl;
+    cout << endl << "-----------------------------------------------------" << endl;
     HTTP_Req req(stdstr);
     //cout << " >" << req.get_type() << " Request for " << req.get_path() << endl;
 

@@ -19,9 +19,18 @@ HTTP_Req::HTTP_Req(std::string req)
 
 
     //parsing starts here
-    it = lines.begin();
-    parse_req_type(*it); //all we care about is the first line.
-
+    for( auto it = lines.begin(); it != lines.end(); it++)
+    {
+        parse_req_type(*it); 
+        parse_content_length(*it);
+    }
+    if(content_length != 0)
+    {
+        if(!parse_payload(req))
+            cout << "Payload: " << payload << endl;
+        else
+            cout << "No payload found" << endl;
+    }
 } //ctor
 
 /*
@@ -64,6 +73,53 @@ int HTTP_Req::parse_host(string s)
     return 0;
 
 }
+//-1 on fail else 0
+int HTTP_Req::parse_content_length(string s)
+{
+    list<string> tokens = split(s, ' ');
+    for(auto i = tokens.begin(); i != tokens.end(); i++)
+    {
+        if( (*i).find("Content-Length:", 0) != string::npos)
+        {
+            content_length = stoi(*(++i));
+            return 0;
+        }
+    }
+    return -1;
+}
+
+/*
+    Takes the entire request (not just a line)
+    and splits it into header and payload,
+    then reads payload into class.instance.
+
+*/
+int HTTP_Req::parse_payload(string s)
+{
+    cout << "Payload Parser" << endl;
+    bool payload_flag = false;
+    list<string> lines = split(s, '\n');
+    stringstream ss;
+    for( auto it = lines.begin(); it != lines.end(); it++)
+    {
+        cout << *it << endl;
+        //header is split by a single line of only \r\n
+        if( (*it) == "\r\n" || (*it) == "\n" || (*it) == "\r")
+        {
+           payload_flag = true;
+           cout << "a whitespace" << endl;
+        }
+        if(payload_flag)
+        {
+            ss << (*it);
+        }
+    }
+    payload = ss.str();
+    if(payload == "")
+        return -1;
+    return 0;
+}
+
 
 //getters
 string HTTP_Req::get_type()

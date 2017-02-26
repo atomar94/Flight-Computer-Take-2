@@ -39,9 +39,13 @@ void Client::write_to(string ip_addr, int portnum, string msg)
     struct sockaddr_in serv_addr;
     int sockfd;
 
+    int optval = 1;
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+
     if( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 )
     {
-        //error
+        close(sockfd);
         return;
     }
 
@@ -56,7 +60,6 @@ void Client::write_to(string ip_addr, int portnum, string msg)
         return;
     }
 
-    cout << "sending: " << msg << endl;
     if ( send(sockfd, msg.c_str(), msg.length(), 0) < 0)
     {
         //error
