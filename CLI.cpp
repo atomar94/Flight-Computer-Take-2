@@ -4,11 +4,13 @@
 #include <sstream>
 #include "Valve_Parser.h"
 #include "Networking/client.h"
+#include "Networking/server.h"
+#include <utility>
 
 using namespace std;
 
 //todo clean this up
-string server_ip = "10.10.10.1"; 
+string server_ip = "10.10.10.2"; 
 
 CLI::CLI()
 {
@@ -162,11 +164,16 @@ void CLI::loop()
 
     while(true)
     {
-        cout << "> ";
-        getline(cin, input);
-        message = parse(input);
+        //cout << "> ";
+        //getline(cin, input);
+        pair<string, string> retval = mserver.read_request(8000);
+        if(retval.first == "")
+          continue;
+        cout << retval.first << " " << retval.second << endl;
+        mclient.get("10.10.10.2", 8000, "/");
+        //message = parse(input);
 
-        route(message);
+        //route(message);
     }
 
 }

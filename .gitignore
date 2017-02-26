@@ -1,3 +1,3 @@
 valve_program
-./Networking/mclient
-./Networking/mserver
+Networking/mclient
+Networking/mserver

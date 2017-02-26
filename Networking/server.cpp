@@ -41,22 +41,19 @@ pair<string, string> Server::read_request(int portnum)
     socklen_t clilen;
     struct sockaddr_in serv_addr, cli_addr;
 
-    cout << "Read request called" << endl;
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sockfd < 0)
     {
         //error on socket
         error("Error on Socket.");
+        close(sockfd);
         return pair<string, string>("", "");
     }
     memset((char *) &serv_addr, 0, sizeof(serv_addr));	
-
     serv_addr.sin_family = AF_INET;
     //serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_addr.s_addr = inet_addr("10.10.10.3");
     serv_addr.sin_port = htons(portnum);
-
-    cout << "do bind" << endl;
     if (bind(sockfd, (struct sockaddr *) &serv_addr,
              sizeof(serv_addr)) < 0)
     { 
@@ -64,7 +61,6 @@ pair<string, string> Server::read_request(int portnum)
         close(sockfd);
         return pair<string, string>("","");
     }
-    cout << "do listen" << endl;
     if(listen(sockfd,5) != 0)    //5 simultaneous connection at most
     {
        error("Listen had an error");
@@ -73,20 +69,19 @@ pair<string, string> Server::read_request(int portnum)
     }
 
     clilen = sizeof(cli_addr);
-    cout << "got someone on port" << endl;
     newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
     if (newsockfd < 0) 
     {
         printf("Error on Accept: %s, %d", strerror(errno), errno);
         close(sockfd);
+        close(newsockfd);
         return pair<string, string>("","");
     }
     int n;
     char buffer[512];
   	memset(buffer, 0, 512);	//reset memory
       
- 	//read client's message
-    cout << "Waiting for msg" << endl;
+ 	  //read client's message
     n = read(newsockfd,buffer,511);
    	if (n < 0)
     {
@@ -102,7 +97,8 @@ pair<string, string> Server::read_request(int portnum)
     //cout << " >" << req.get_type() << " Request for " << req.get_path() << endl;
 
     send_response(""); //send an empty response.
-    
+    close(sockfd);
+    close(newsockfd);
     return pair<string, string>(req.get_type(), req.get_path());
 }
 

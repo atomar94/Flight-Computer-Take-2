@@ -3,6 +3,8 @@
 #include "string"
 #include "utility"
 
+#ifndef SERVER_H
+#define SERVER_H
 using namespace std;
 
 class Server
@@ -18,4 +20,4 @@ class Server
 
         void send_response(string msg);
 };
-
+#endif

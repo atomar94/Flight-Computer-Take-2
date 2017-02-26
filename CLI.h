@@ -4,6 +4,7 @@
 #include "list"
 #include "Valve.h"
 #include "Networking/client.h"
+#include "Networking/server.h"
 
 #ifndef CLI_H
 #define CLI_H
@@ -35,6 +36,7 @@ class CLI
     private:
         list<Valve *> m_valves;
         Client mclient;
+        Server mserver;
 };
 
 #endif
