@@ -19,6 +19,7 @@
 #include <string>
 #include <iostream> //read and write
 #include <utility> //pair
+#include <tuple>
 
 #include "http_req.h"
 #include "http_res.h"
@@ -35,7 +36,7 @@ void error(std::string msg)
 }
 
 
-pair<string, string> Server::read_request(int portnum)
+tuple<string, string, string> Server::read_request(int portnum)
 {
     int pid;
     socklen_t clilen;
@@ -47,7 +48,7 @@ pair<string, string> Server::read_request(int portnum)
         //error on socket
         error("Error on Socket.");
         close(sockfd);
-        return pair<string, string>("", "");
+        return tuple<string, string, string>("", "", "");
     }
     int optval = 1; //so we can set the value of SO_REUSEADDR to 1
     //so after we close the socket it is released immediately
@@ -64,13 +65,13 @@ pair<string, string> Server::read_request(int portnum)
     { 
         error("ERROR on binding");
         close(sockfd);
-        return pair<string, string>("","");
+        return tuple<string, string, string>("","", "");
     }
     if(listen(sockfd,5) != 0)    //5 simultaneous connection at most
     {
        error("Listen had an error");
        close(sockfd);
-       return pair<string, string>("","");
+       return tuple<string,string, string>("", "","");
     }
 
     clilen = sizeof(cli_addr);
@@ -80,7 +81,7 @@ pair<string, string> Server::read_request(int portnum)
         printf("Error on Accept: %s, %d", strerror(errno), errno);
         close(sockfd);
         close(newsockfd);
-        return pair<string, string>("","");
+        return tuple<string, string, string>("","", "");
     }
     int n;
     char buffer[512];
@@ -93,7 +94,7 @@ pair<string, string> Server::read_request(int portnum)
         close(sockfd);
         close(newsockfd);
         error("error on client read.");
-        return pair<string, string>("","");
+        return tuple<string, string, string>("", "","");
     }
     string stdstr = buffer;
     HTTP_Req req(stdstr);
@@ -101,7 +102,8 @@ pair<string, string> Server::read_request(int portnum)
     send_response(""); //send an empty response.
     close(sockfd);
     close(newsockfd);
-    return pair<string, string>(req.get_type(), req.get_path());
+    return tuple<string, string, string>(req.get_type(), req.get_path(), 
+            req.get_payload());
 }
 
 void Server::send_response(string msg)

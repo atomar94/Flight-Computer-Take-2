@@ -6,6 +6,7 @@
 #include "Networking/client.h"
 #include "Networking/server.h"
 #include <utility>
+#include <tuple>
 
 using namespace std;
 
@@ -162,12 +163,19 @@ void CLI::loop()
     string input;
     list<string> message;
 
+    string path;
+    string method;
+    string payload;
+
     while(true)
     {
         //cout << "waiting... ";
         //getline(cin, input);
-        pair<string, string> retval = mserver.read_request(8000);
-        if(retval.first == "")
+        tie(method, path, payload) =  mserver.read_request(8000);
+        cout << "Method\t" << method << endl;
+        cout << "Path:\t" << path << endl;
+        cout << "Payload:\t" << payload << endl;
+        if(method == "")
           continue;
         mclient.get("10.10.10.2", 8000, "/");
         //message = parse(input);

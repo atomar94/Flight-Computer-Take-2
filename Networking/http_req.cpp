@@ -42,7 +42,9 @@ HTTP_Req::HTTP_Req(std::string req)
  */
 int HTTP_Req::parse_req_type(string h)
 {
-
+    //already parsed
+    if(req_type != "")
+        return 0;
     list<string> fields = split(h, ' ');
     if(fields.size() != 3) //GET-or-POST, path, http-type
     {
@@ -53,14 +55,14 @@ int HTTP_Req::parse_req_type(string h)
     if( *it == "GET" || *it == "POST")
     {  
         req_type = *it;
-    } else {
-         req_type = "invalid";
+    }
+    else
+    {
+        req_type = "invalid";
     }
     it++;
-
     path = *it;
     it++;
-
     version = *it;
     return 0;
 }
@@ -106,13 +108,18 @@ int HTTP_Req::parse_payload(string s)
     for( auto it = lines.begin(); it != lines.end(); it++)
     {
         //header is split by a single line of only \r\n
+        //there areno \n in these strings because we split the string on that char
+        // but they are listed here in case behavior changes elsewhere 
         if( (*it) == "\r\n" || (*it) == "\n" || (*it) == "\r")
         {
            payload_flag = true;
         }
         if(payload_flag)
         {
-            ss << (*it);
+            if( (*it).at(0) == '\r' )
+                ss << (*it).substr(1, string::npos);
+            else
+                ss << (*it);
         }
     }
     payload = ss.str();
@@ -139,6 +146,8 @@ string HTTP_Req::get_version()
 string HTTP_Req::get_host()
 { return host; }
 
+string HTTP_Req::get_payload()
+{ return payload; }
 
 //note that delim is a char, not a char string, not a std::string
 std::list<string> HTTP_Req::split(string str, char delim)
