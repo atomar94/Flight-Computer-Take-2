@@ -21,7 +21,6 @@ class CLI
     void parse_payload(string s);
 
     //built in commands
-    string echo(list<string> message); 
     void status(list<string> message);
 
     //valve.h wrappers
