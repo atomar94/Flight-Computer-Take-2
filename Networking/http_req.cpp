@@ -9,14 +9,14 @@ using namespace std;
 
 bool REQ_TESTING = false; 
 
+/*
+* The ctor takes the entire request string and passes
+* each line through the parser to populate internal vars.
+*/
 HTTP_Req::HTTP_Req(std::string req)
 {
     // HTTP Parsing
     list<string> lines = split(req, '\n');
-
-    list<string>::iterator it;
-    int i = 0;
-
 
     //parsing starts here
     for( auto it = lines.begin(); it != lines.end(); it++)
@@ -25,10 +25,8 @@ HTTP_Req::HTTP_Req(std::string req)
         parse_content_length(*it);
     }
     if(content_length)
-    {
         parse_payload(req);
-    }
-} //ctor
+}
 
 /*
  *  Ret -1 on fail else 0
@@ -88,11 +86,10 @@ int HTTP_Req::parse_content_length(string s)
 }
 
 /*
-    Takes the entire request (not just a line)
-    and splits it into header and payload,
-    then reads payload into class.instance.
-
-*/
+ *  Extract the payload and load the string into this class instance.
+ *
+ *  RETURNS:   -1 on fail else 0
+ */
 int HTTP_Req::parse_payload(string s)
 {
     bool payload_flag = false;
@@ -101,12 +98,9 @@ int HTTP_Req::parse_payload(string s)
     for( auto it = lines.begin(); it != lines.end(); it++)
     {
         //header is split by a single line of only \r\n
-        //there areno \n in these strings because we split the string on that char
-        // but they are listed here in case behavior changes elsewhere 
         if( (*it) == "\r\n" || (*it) == "\n" || (*it) == "\r")
-        {
-           payload_flag = true;
-        }
+        { payload_flag = true; }
+
         if(payload_flag)
         {
             if( (*it).at(0) == '\r' )
@@ -121,17 +115,15 @@ int HTTP_Req::parse_payload(string s)
     return 0;
 }
 
-
-//getters
+/***********************
+ *      getters
+ ***********************/
 string HTTP_Req::get_type()
-{
-    return req_type;
-}
+{ return req_type; }
 
+// json string
 string HTTP_Req::get_path()
-{
-    return path;
-}
+{ return path; }
 
 string HTTP_Req::get_version()
 { return version; }
@@ -142,16 +134,13 @@ string HTTP_Req::get_host()
 string HTTP_Req::get_payload()
 { return payload; }
 
-//note that delim is a char, not a char string, not a std::string
 std::list<string> HTTP_Req::split(string str, char delim)
 {
-    std::stringstream ss;
+    stringstream ss;
     ss.str(str);
-    std::string token;
-    std::list<string> l;
-    while(std::getline(ss, token, delim))
-    {
-        l.push_back(token);
-    }
+    string token;
+    list<string> l;
+    while(getline(ss, token, delim))
+    { l.push_back(token); }
     return l;
 }

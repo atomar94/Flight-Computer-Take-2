@@ -14,8 +14,8 @@ class HTTP_Req
         string get_type(); //get or post
         string get_path(); //what page
         string get_version(); //http1.1, 1.0, etc.
-        string get_host();
-        string get_payload();
+        string get_host(); //ip
+        string get_payload(); //json string
 
     private:
 
