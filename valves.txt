@@ -23,10 +23,10 @@
 #
 #examples
 #nox_vent_valve open
-a closed 1
-b closed 2
-c closed 3
-d closed 4
-e closed 5
-f closed 6
+Valve1 closed 1
+Valve2 closed 2
+Valve3 closed 3
+Valve4 closed 4
+Valve5 closed 5
+Valve6 closed 6
 

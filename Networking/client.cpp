@@ -75,6 +75,5 @@ void Client::write_to(string ip_addr, int portnum, string msg)
         return;
     }
     string stdstr = server_reply;
-    cout << stdstr << endl;
     close(sockfd);
 }

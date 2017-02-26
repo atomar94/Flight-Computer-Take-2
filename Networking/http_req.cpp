@@ -24,16 +24,9 @@ HTTP_Req::HTTP_Req(std::string req)
         parse_req_type(*it); 
         parse_content_length(*it);
     }
-    cout << "Content length = " << content_length << endl;
     if(content_length)
     {
-        if(!parse_payload(req))
-        {
-            cout << "Payload: " << endl;
-            cout << payload << endl;
-        }
-        else
-            cout << "No payload found" << endl;
+        parse_payload(req);
     }
 } //ctor
 

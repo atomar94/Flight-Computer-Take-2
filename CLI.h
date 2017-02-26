@@ -18,6 +18,7 @@ class CLI
     
     list<string> parse(string input);
     void route(list<string> message);
+    void parse_payload(string s);
 
     //built in commands
     string echo(list<string> message); 

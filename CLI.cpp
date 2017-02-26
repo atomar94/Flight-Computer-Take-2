@@ -7,6 +7,7 @@
 #include "Networking/server.h"
 #include <utility>
 #include <tuple>
+#include "jsoncpp/json/json.h"
 
 using namespace std;
 
@@ -74,6 +75,7 @@ string CLI::echo(list<string> message)
 
 void CLI::open_valve(list<string> message)
 {
+    cout << "open-valve routing" << endl;
     if(message.size() != 2)
         cout << "malformed open-valve command." << endl;
 
@@ -115,6 +117,7 @@ void CLI::close_valve(list<string> message)
     {
         if( (*it)->get_name() == valve_name)
         {
+            (*it)->close_valve();
             stringstream ss;
             ss << "{ \"identity\": \"vcb1\", ";
             ss << "\"valve-name\": \"" << (*it)->get_name() << "\", ";
@@ -157,6 +160,29 @@ list<string> CLI::split(string str, char delim)
     return l;
 }
 
+void CLI::parse_payload(string s)
+{
+    Json::Value root;
+    stringstream ss;
+    ss << s;
+    ss >> root;
+    list<string> cmd_list;
+    string cmd = root["cmd"].asString();
+    if(cmd != "")
+        cmd_list.push_back(cmd);
+    string arg = root["arg0"].asString();
+
+    //TODO: dont hardcode the arg parsing.
+    //this will most likely break if things arent hardcoded
+    //precisely
+    if(arg != "")
+        cmd_list.push_back(arg);
+    arg = root["arg1"].asString();
+    if(arg != "")
+        cmd_list.push_back(arg);
+
+    route(cmd_list);
+}
 
 void CLI::loop()
 {
@@ -177,6 +203,8 @@ void CLI::loop()
         cout << "Payload:\t" << payload << endl;
         if(method == "")
           continue;
+        if(payload != "")
+            parse_payload(payload);
         mclient.get("10.10.10.2", 8000, "/");
         //message = parse(input);
 
