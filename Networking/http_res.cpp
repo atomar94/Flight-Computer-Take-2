@@ -4,10 +4,7 @@
 #include <sstream>
 #include "http_res.h"
 
-
-
 using namespace std;
-
 
 //because the mingw compiler doesnt have this function even though cpp does.
 //this is a known bug

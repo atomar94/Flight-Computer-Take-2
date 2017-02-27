@@ -8,7 +8,7 @@ libs=jsoncpp/jsoncpp.cpp
 bcmflags=-L/home/pi/bcm2835-1.50/src/ -lbcm2835
 
 all:
-	g++ -g -std=c++11 main.cpp Valve.cpp Valve_Parser.cpp CLI.cpp $(networking) $(libs) -o valve_program $(bcmflags) 
+	g++ -g -std=c++11 main.cpp $(networking) $(libs) -o data-node $(bcmflags) 
 
 clean:
 	rm valve_program
