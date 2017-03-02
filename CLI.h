@@ -3,6 +3,9 @@
 
 #include "Network.h"
 #include "string"
+#include "list"
+
+using namespace std;
 
 class CLI
 {
@@ -14,8 +17,11 @@ class CLI
     void parse(string input);
     void route(list<string> message);
 
+
+
     //built in commands
     void echo(list<string> message); 
+    void status(list<string> message);
 
     //valve.h wrappers
     void open_valve(list<string> message);
@@ -25,6 +31,7 @@ class CLI
     void is_actuated();
     void is_open();
 
+    list<string> split(string in);
 
 };
 
